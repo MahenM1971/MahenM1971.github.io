@@ -37,5 +37,5 @@ function randomQuote() {
 // First load
 randomQuote();
 
-// Refresh every 20 seconds (20,000ms)
-setInterval(randomQuote, 20000);
+// Refresh every 60 seconds (60,000ms)
+setInterval(randomQuote, 60000);
