@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Scripture Generator</title>
   <link rel="icon" href="favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="styles.css">
@@ -9,19 +10,23 @@
 <body>
   <div class="background"></div>
 
-  <div class="container">
+  <main class="container">
     <div class="card">
       <p class="quote">Loading scripture...</p>
       <span class="name">- Author</span>
     </div>
-  </div>
+  </main>
 
   <footer class="footer">
-    <p>Made with ❤️ © 2025 Mahen Mahindaratne | All rights reserved</p>
-    <p>Backgroud image is of the Tour Magdala from the French Commune of Rennes-le-Château</p>
-    <p><i>Image Rights are claimed by Chosovi</i></p>
+    <p>Made with ❤️ © <span id="year">2025</span> Mahen Mahindaratne | All rights reserved</p>
+    <p>Background image is of the Tour Magdala from the French Commune of Rennes-le-Château</p>
+    <p><i>Image used with permission from Chosovi</i></p>
   </footer>
 
   <script src="script.js"></script>
+  <script>
+    // Update year dynamically
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
