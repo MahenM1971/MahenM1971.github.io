@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Interregnum of Oliver Cromwell - The Commonwealth</title>
+  <style>
+    body {
+      background-color: rgba(0, 33, 71, 0.8); 
+      color: #3a3a3a; 
+      font-family: 'Georgia', serif; 
+      line-height: 1.6;
+      padding: 20px;
+      margin: 0;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f8f1e5;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h1, h2, h3 {
+      color: #2d2d2d; 
+    }
+
+    button#printButton {
+      display: block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      font-size: 16px;
+      color: #fff;
+      background-color: #d97706; 
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button#printButton:hover {
+      background-color: #b65c04; 
+    }
+
+    #footer {
+      align-items: center;
+      align-self: center;
+      align-content: center;
+      text-align: center; 
+      padding: 10px;
+    }
+    
+
+    @media print {
+      body {
+        background-color: #fff; 
+        color: #000; 
+      }
+
+      .container {
+        box-shadow: none;
+        border: none;
+      }
+
+      button#printButton {
+        display: none; 
+      }
+    }
+  </style>
+</head>
+<body>
+    <div class="container">
+    <h1>The Interregnum of Oliver Cromwell - The Commonwealth</h1>
+    <p>The Interregnum, spanning from 1649 to 1660, marked a pivotal period in English history characterized by the absence of a monarch and the establishment of the Commonwealth. Oliver Cromwell, a prominent figure during this time, played a central role in reshaping England's political landscape. Following the execution of King Charles I in 1649, Cromwell rose to power as Lord Protector, effectively serving as the head of state.</p>
+    <p>Under Cromwell's leadership, England experienced significant social, religious, and political reforms. Cromwell's government aimed to establish a republic based on Puritan principles, promoting religious tolerance and attempting to unite the nation under a commonwealth. However, his rule was not without controversy, marked by military campaigns in Ireland and Scotland to assert English authority.</p>
+    <p>Despite his efforts, Cromwell faced challenges in maintaining stability, and upon his death in 1658, his son Richard Cromwell struggled to fill his father's shoes. This period of uncertainty paved the way for the restoration of the monarchy in 1660, with Charles II ascending to the throne. The Interregnum and the Commonwealth left a lasting impact on English society, shaping the course of its political development and influencing future governance structures.</p>
+    <button id="printButton" onclick="window.print()">Print this Page</button>
+    </div>
+    <footer id="footer">
+        <p>&copy; Mahen Mahindaratne. All rights reserved.</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Conventicle Act 1664 – Bushel’s Case</title>
+  <style>
+    body {
+      background-color: rgba(0, 33, 71, 0.8); 
+      color: #3a3a3a; 
+      font-family: 'Georgia', serif; 
+      line-height: 1.6;
+      padding: 20px;
+      margin: 0;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f8f1e5;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h1, h2, h3 {
+      color: #2d2d2d; 
+    }
+
+    button#printButton {
+      display: block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      font-size: 16px;
+      color: #fff;
+      background-color: #d97706; 
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button#printButton:hover {
+      background-color: #b65c04; 
+    }
+
+    #footer {
+      align-items: center;
+      align-self: center;
+      align-content: center;
+      text-align: center; 
+      padding: 10px;
+    }
+    
+
+    @media print {
+      body {
+        background-color: #fff; 
+        color: #000; 
+      }
+
+      .container {
+        box-shadow: none;
+        border: none;
+      }
+
+      button#printButton {
+        display: none; 
+      }
+    }
+  </style>
+</head>
+<body>
+    <div class="container">
+    <h1>The Conventicle Act 1664 – Bushel’s Case</h1>
+    <p>The Conventicle Act 1664, was part of the Clarendon Code, and prevented a religious assembly of more than five individuals outside the Church of England, and not within the rubrics of the Book of Common Prayer 1662.</p>
+    <p>In the Bushel’s Case, William Penn, and William Mead were on trial for unlawful assembly. The jury was called to return verdict. When they refused find the defendants guilty, they were imprisoned, and asked to reconsider. Edward Bushel, the foreman of the jury, appealed to Lord Chief Justice John Vaughan of the Court of Common Pleas. Vaughan CJ could easily have refused to adjudicate for want of jurisdiction, and refer the appeal back to the King’s Bench. Instead, he ruled that members of the jury had a right of habeas corpus, and could not be unlawfully detained, for exercising their duty, and responsibility as jurors.</p>
+    <button id="printButton" onclick="window.print()">Print this Page</button>
+    </div>
+    <footer id="footer">
+        <p>&copy; Mahen Mahindaratne. All rights reserved.</p>
+    </footer>
+</body>
+</html>

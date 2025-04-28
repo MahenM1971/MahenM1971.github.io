@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Habeas Corpus Act 1640</title>
+  <style>
+    body {
+      background-color: rgba(0, 33, 71, 0.8); 
+      color: #3a3a3a; 
+      font-family: 'Georgia', serif; 
+      line-height: 1.6;
+      padding: 20px;
+      margin: 0;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f8f1e5;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h1, h2, h3 {
+      color: #2d2d2d; 
+    }
+
+    button#printButton {
+      display: block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      font-size: 16px;
+      color: #fff;
+      background-color: #d97706; 
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button#printButton:hover {
+      background-color: #b65c04; 
+    }
+
+    #footer {
+      align-items: center;
+      align-self: center;
+      align-content: center;
+      text-align: center; 
+      padding: 10px;
+    }
+    
+
+    @media print {
+      body {
+        background-color: #fff; 
+        color: #000; 
+      }
+
+      .container {
+        box-shadow: none;
+        border: none;
+      }
+
+      button#printButton {
+        display: none; 
+      }
+    }
+  </style>
+</head>
+<body>
+    <div class="container">
+    <h1>The Habeas Corpus Act 1640</h1>
+    <p>The death of John Lilburn stirred Parliament in to the passing of the Habeas Corpus Act, 1640. While pending approval in the House of Lords, the Bill failed to secure a majority vote. Lords Norris, and Grey were the tellers: Lord Norris for the Nays, and Lord Grey for the Ayes. It is said that Lord Norris was a man subject to the vapors, and was not paying much attention. When a rather fat Lord came to be counted, Lord Grey counted him as 10. This jest was amiss on Lord Norris. Thus 9 extra votes were counted for Ayes over Nays, and the Habeas Corpus Act became law in 1640.</p>
+    <p>The Habeas Corpus Act 1640 made it possible for a writ of habeas corpus to be sought out, and executed beyond the territory of England, provided that the English Common Law has jurisdiction. Thus, John Lilburn would have been able to have the benefit of the Petition of Rights 1628, had the Habeas Corpus Act 1640 been in place when he was arrested for seditious libel, and removed to Mont Orgueil Castle on the Island of Jersey, for detention, away from mainland Britain, and the English Common Law.</p>
+    <button id="printButton" onclick="window.print()">Print this Page</button>
+    </div>
+    <footer id="footer">
+        <p>&copy; Mahen Mahindaratne. All rights reserved.</p>
+    </footer>
+</body>
+</html>
