@@ -41,7 +41,7 @@ const quotes = [
     {
         content: "A man should stand on his own two feet and not be dependent on others.",
         author: "Egils Saga"
-    },   
+    }  
 ];
 
 function randomQuote() {
