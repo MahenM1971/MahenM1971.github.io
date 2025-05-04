@@ -9,11 +9,11 @@
 
 body {
   background-image: url('tyr-8923935_1280.png');
-  background-color: #0a0e11; /* Dark stormy blue */
+  background-color: #0a0e11; 
   background-size: cover;
   background-position: center;
   font-family: 'Skranji', 'Cinzel', serif;
-  color: #e0d6c2; /* Aged parchment color */
+  color: #e0d6c2; 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -24,11 +24,11 @@ body {
 .quote-container {
   width: 80%;
   max-width: 800px;
-  background: rgba(15, 10, 5, 0.8); /* Dark wood/iron texture */
+  background: rgba(15, 10, 5, 0.8); 
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   border: 2px solid #5a3a20;
-  border-radius: 0; /* Sharp rectangular edges */
+  border-radius: 0; 
   padding: 40px;
   box-shadow: 
     0 0 15px rgba(173, 92, 0, 0.5),
