@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parties Form Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-container {
+            max-width: auto;
+            margin: 20px auto;
+            padding: 20px;
+            flex: 1;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 5px;
+        }
+        
+        h1 {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            border-bottom: 2px solid #2980b9;
+            padding-bottom: 10px;
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: auto;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+        }
+        
+        td {
+            padding: 10px;
+            vertical-align: middle;
+            border: 1px solid #ddd;
+        }
+        
+        .label {
+            font-weight: bold;
+            width: auto;
+            background-color: #f2f2f2;
+        }
+        
+        .input-field {
+            background-color: #ffffff;
+            width: auto;
+            border: 1px solid #ddd;
+            padding: 8px;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: #2980b9;
+            box-shadow: 0 0 5px rgba(41, 128, 185, 0.3);
+        }
+        
+        .sub-label {
+            width: auto;
+            background-color: #f2f2f2;
+        }
+        
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #2980b9;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-right: 10px;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #3498db;
+        }
+        
+        #addPartyBtn {
+            background-color: #27ae60;
+        }
+        
+        #addPartyBtn:hover {
+            background-color: #2ecc71;
+        }
+        
+        #removePartyBtn {
+            background-color: #e74c3c;
+        }
+        
+        #removePartyBtn:hover {
+            background-color: #c0392b;
+        }
+        
+        footer {
+            background-color: #2980b9;
+            color: white;
+            text-align: center;
+            margin-top: auto;
+            font-size: 14px;
+        }
+        
+        #outputContainer {
+            margin-top: 30px;
+            display: none;
+        }
+        
+        #generatedDocument {
+            border: 1px solid #ddd;
+            padding: 20px;
+            background-color: white;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        
+        #copyBtn {
+            background-color: #2980b9;
+        }
+        
+        #copyBtn:hover {
+            background-color: #3498db;
+        }
+        
+        @media (max-width: 768px) {
+            .form-container {
+                padding: 15px;
+                margin: 10px;
+                width: auto;
+            }
+            
+            td {
+                padding: 8px 5px;
+                display: block;
+                width: 100%;
+                border: none;
+                border-bottom: 1px solid #ddd;
+            }
+            
+            .label, .sub-label {
+                width: 100%;
+                background-color: transparent;
+                padding-bottom: 5px;
+            }
+            
+            table {
+                border: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Parties</h1>
+        
+        <table id="partiesTable">
+            <tr>
+                <td class="label">Name</td>
+                <td><input type="text" class="input-field" id="name" placeholder="[insert name]"></td>
+            </tr>
+            <tr>
+                <td class="label">ABN</td>
+                <td><input type="text" class="input-field" id="abn" placeholder="[insert ABN – or replace with ACN or delete if not required]"></td>
+            </tr>
+            <tr>
+                <td class="label">Description</td>
+                <td><input type="text" class="input-field" id="description" placeholder="[insert party's description]"></td>
+            </tr>
+            <tr>
+                <td class="label">Notice details</td>
+                <td class="sub-label">Address</td>
+                <td><input type="text" class="input-field" id="address" placeholder="[insert address]"></td>
+            </tr>
+            <tr>
+                <td class="label"></td>
+                <td class="sub-label">Email</td>
+                <td><input type="email" class="input-field" id="email" placeholder="[insert email address]"></td>
+            </tr>
+            <tr>
+                <td class="label"></td>
+                <td class="sub-label">Attention</td>
+                <td><input type="text" class="input-field" id="attention" placeholder="[insert name]"></td>
+            </tr>
+        </table>
+        
+        <button id="addPartyBtn">Add Another Party</button>
+        <button id="removePartyBtn">Remove Last Party</button>
+        <button id="generateBtn">Generate Document</button>
+        
+        <div id="outputContainer">
+            <h2>Generated Document:</h2>
+            <div id="generatedDocument"></div>
+            <button id="copyBtn">Copy to Clipboard</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let partyCount = 1;
+            
+            // Add another party section
+            document.getElementById('addPartyBtn').addEventListener('click', function() {
+                partyCount++;
+                const partiesTable = document.getElementById('partiesTable');
+                
+                // Add separator
+                const separatorRow = document.createElement('tr');
+                separatorRow.innerHTML = '<td colspan="3" style="height: 20px; border: none;"></td>';
+                partiesTable.appendChild(separatorRow);
+                
+                // Add new party section
+                const newPartyRow = document.createElement('tr');
+                newPartyRow.innerHTML = `
+                    <td class="label">Name</td>
+                    <td><input type="text" class="input-field" id="name_${partyCount}" placeholder="[insert name]"></td>
+                `;
+                partiesTable.appendChild(newPartyRow);
+                
+                const abnRow = document.createElement('tr');
+                abnRow.innerHTML = `
+                    <td class="label">ABN</td>
+                    <td><input type="text" class="input-field" id="abn_${partyCount}" placeholder="[insert ABN – or replace with ACN or delete if not required]"></td>
+                `;
+                partiesTable.appendChild(abnRow);
+                
+                const descRow = document.createElement('tr');
+                descRow.innerHTML = `
+                    <td class="label">Description</td>
+                    <td><input type="text" class="input-field" id="description_${partyCount}" placeholder="[insert party's description]"></td>
+                `;
+                partiesTable.appendChild(descRow);
+                
+                const noticeRow = document.createElement('tr');
+                noticeRow.innerHTML = `
+                    <td class="label">Notice details</td>
+                    <td class="sub-label">Address</td>
+                    <td><input type="text" class="input-field" id="address_${partyCount}" placeholder="[insert address]"></td>
+                `;
+                partiesTable.appendChild(noticeRow);
+                
+                const emailRow = document.createElement('tr');
+                emailRow.innerHTML = `
+                    <td class="label"></td>
+                    <td class="sub-label">Email</td>
+                    <td><input type="email" class="input-field" id="email_${partyCount}" placeholder="[insert email address]"></td>
+                `;
+                partiesTable.appendChild(emailRow);
+                
+                const attentionRow = document.createElement('tr');
+                attentionRow.innerHTML = `
+                    <td class="label"></td>
+                    <td class="sub-label">Attention</td>
+                    <td><input type="text" class="input-field" id="attention_${partyCount}" placeholder="[insert name]"></td>
+                `;
+                partiesTable.appendChild(attentionRow);
+            });
+            
+            // Remove the last party section
+            document.getElementById('removePartyBtn').addEventListener('click', function() {
+                if (partyCount > 1) {
+                    const partiesTable = document.getElementById('partiesTable');
+                    // Remove the last 7 rows (6 party rows + 1 separator row)
+                    for (let i = 0; i < 7; i++) {
+                        if (partiesTable.rows.length > 6) { // Ensure we don't remove the initial party
+                            partiesTable.deleteRow(partiesTable.rows.length - 1);
+                        }
+                    }
+                    partyCount--;
+                } else {
+                    alert("You can't remove the first party.");
+                }
+            });
+            
+            // Generate the document
+            document.getElementById('generateBtn').addEventListener('click', function() {
+                let generatedHTML = `
+                    <html>
+                    <head>
+                        <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+                        <style>
+                            /* Your original styles here */
+                            table td, table th { padding: 0; }
+                            .c10 { border-right-style: solid; padding: 0pt 5.8pt 0pt 5.8pt; border-bottom-color: #000000; border-top-width: 0pt; border-right-width: 0pt; border-left-color: #000000; vertical-align: top; border-right-color: #000000; border-left-width: 0pt; border-top-style: solid; border-left-style: solid; border-bottom-width: 0pt; width: 346.6pt; border-top-color: #000000; border-bottom-style: solid }
+                            .c0 { border-right-style: solid; padding: 0pt 5.8pt 0pt 5.8pt; border-bottom-color: #000000; border-top-width: 0pt; border-right-width: 0pt; border-left-color: #000000; vertical-align: top; border-right-color: #000000; border-left-width: 0pt; border-top-style: solid; border-left-style: solid; border-bottom-width: 0pt; width: 99.2pt; border-top-color: #000000; border-bottom-style: solid }
+                            .c6 { border-right-style: solid; padding: 0pt 5.8pt 0pt 5.8pt; border-bottom-color: #000000; border-top-width: 0pt; border-right-width: 0pt; border-left-color: #000000; vertical-align: top; border-right-color: #000000; border-left-width: 0pt; border-top-style: solid; border-left-style: solid; border-bottom-width: 0pt; width: 106.3pt; border-top-color: #000000; border-bottom-style: solid }
+                            .c9 { border-right-style: solid; padding: 0pt 5.8pt 0pt 5.8pt; border-bottom-color: #000000; border-top-width: 0pt; border-right-width: 0pt; border-left-color: #000000; vertical-align: top; border-right-color: #000000; border-left-width: 0pt; border-top-style: solid; border-left-style: solid; border-bottom-width: 0pt; width: 247.4pt; border-top-color: #000000; border-bottom-style: solid }
+                            .c15 { color: #000000; font-weight: 400; text-decoration: none; vertical-align: baseline; font-size: 12pt; font-family: "Times New Roman"; font-style: normal }
+                            .c16 { padding-top: 0pt; text-indent: -0.5pt; padding-bottom: 6pt; line-height: 1.0; orphans: 2; widows: 2; text-align: left }
+                            .c18 { color: #000000; font-weight: 700; text-decoration: none; vertical-align: baseline; font-size: 11pt; font-family: "Arial"; font-style: normal }
+                            .c8 { color: #000000; font-weight: 700; text-decoration: none; vertical-align: baseline; font-size: 10pt; font-family: "Arial"; font-style: normal }
+                            .c2 { color: #000000; font-weight: 400; text-decoration: none; vertical-align: baseline; font-size: 10pt; font-family: "Arial"; font-style: normal }
+                            .c5 { margin: 0; padding: 0; line-height: 1; orphans: 2; widows: 2; text-align: left }
+                            .c13 { padding-top: 0pt; padding-bottom: 0pt; line-height: 1.0; orphans: 2; widows: 2; text-align: justify }
+                            .c1 { margin: 0; padding: 0; line-height: 1; text-align: left; height: auto }
+                            .c3 { background-color: #ffffff; font-size: 10pt; font-family: "Arial"; font-weight: 400 }
+                            .c14 { margin-left: -5.8pt; border-spacing: 0; border-collapse: collapse; margin-right: auto }
+                            .c19 { font-size: 10pt; font-family: "Arial"; font-weight: 700 }
+                            .c12 { background-color: #ffffff; max-width: 451pt; padding: 72pt 72pt 72pt 72pt }
+                            .c4 { background-color: #ffffff }
+                            .c7 { height: 12pt }
+                            .c11 { height: 0pt }
+                            .c17 { height: 10pt }
+                        </style>
+                    </head>
+                    <body class="c12 doc-content">
+                        <p class="c13"><span class="c18">Parties</span></p>
+                        <p class="c13 c7"><span class="c8"></span></p>
+                        <table class="c14">
+                `;
+                
+                // Add each party's data
+                for (let i = 1; i <= partyCount; i++) {
+                    const nameId = i === 1 ? 'name' : `name_${i}`;
+                    const abnId = i === 1 ? 'abn' : `abn_${i}`;
+                    const descId = i === 1 ? 'description' : `description_${i}`;
+                    const addrId = i === 1 ? 'address' : `address_${i}`;
+                    const emailId = i === 1 ? 'email' : `email_${i}`;
+                    const attnId = i === 1 ? 'attention' : `attention_${i}`;
+                    
+                    const name = document.getElementById(nameId).value || '[insert name]';
+                    const abn = document.getElementById(abnId).value || '[insert ABN – or replace with ACN or delete if not required]';
+                    const desc = document.getElementById(descId).value || '[insert party\'s description]';
+                    const addr = document.getElementById(addrId).value || '[insert address]';
+                    const email = document.getElementById(emailId).value || '[insert email address]';
+                    const attn = document.getElementById(attnId).value || '[insert name]';
+                    
+                    generatedHTML += `
+                        <tr class="c11">
+                            <td class="c6" colspan="1" rowspan="1"><p class="c5"><span class="c2">Name</span></p></td>
+                            <td class="c10" colspan="2" rowspan="1"><p class="c5"><span class="c3">${name}</span></p></td>
+                        </tr>
+                        <tr class="c11">
+                            <td class="c6" colspan="1" rowspan="1"><p class="c5"><span class="c2">ABN</span></p></td>
+                            <td class="c10" colspan="2" rowspan="1"><p class="c5"><span class="c3">${abn}</span></p></td>
+                        </tr>
+                        <tr class="c11">
+                            <td class="c6" colspan="1" rowspan="1"><p class="c5"><span class="c2">Description</span></p></td>
+                            <td class="c10" colspan="2" rowspan="1"><p class="c5"><span class="c4 c19">${desc}</span></p></td>
+                        </tr>
+                        <tr class="c11">
+                            <td class="c6" colspan="1" rowspan="1"><p class="c5"><span class="c2">Notice details</span></p></td>
+                            <td class="c0" colspan="1" rowspan="1"><p class="c5"><span class="c2">Address</span></p></td>
+                            <td class="c9" colspan="1" rowspan="1"><p class="c5"><span class="c3">${addr}</span></p></td>
+                        </tr>
+                        <tr class="c11">
+                            <td class="c6" colspan="1" rowspan="1"><p class="c5 c7"><span class="c2"></span></p></td>
+                            <td class="c0" colspan="1" rowspan="1"><p class="c5"><span class="c2">Email</span></p></td>
+                            <td class="c9" colspan="1" rowspan="1"><p class="c5"><span class="c3">${email}</span></p></td>
+                        </tr>
+                        <tr class="c11">
+                            <td class="c6" colspan="1" rowspan="1"><p class="c5 c7"><span class="c2"></span></p></td>
+                            <td class="c0" colspan="1" rowspan="1"><p class="c5"><span class="c2">Attention</span></p></td>
+                            <td class="c9" colspan="1" rowspan="1"><p class="c5"><span class="c3">${attn}</span></p></td>
+                        </tr>
+                    `;
+                    
+                    // Add spacing between parties if not the last one
+                    if (i < partyCount) {
+                        generatedHTML += `
+                            <tr class="c11">
+                                <td class="c6" colspan="1" rowspan="1"><p class="c5 c7"><span class="c2"></span></p></td>
+                                <td class="c10" colspan="2" rowspan="1"><p class="c5 c7"><span class="c2"></span></p></td>
+                            </tr>
+                        `;
+                    }
+                }
+                
+                // Close the HTML
+                generatedHTML += `
+                        </table>
+                        <p class="c7 c13"><span class="c8"></span></p>
+                        <p class="c7 c16"><span class="c2"></span></p>
+                    </body>
+                    </html>
+                `;
+                
+                // Display the generated document
+                document.getElementById('generatedDocument').innerHTML = generatedHTML;
+                document.getElementById('outputContainer').style.display = 'block';
+            });
+            
+            // Copy to clipboard
+            document.getElementById('copyBtn').addEventListener('click', function () {
+                const generatedDoc = document.getElementById('generatedDocument');
+                const html = generatedDoc.innerHTML;
+
+                // Create a blob from the HTML
+                const blob = new Blob([html], { type: 'text/html' });
+
+                // Use ClipboardItem to write rich HTML content
+                const data = [new ClipboardItem({ "text/html": blob })];
+
+                navigator.clipboard.write(data).then(function () {
+                    alert('Formatted content copied to clipboard!');
+                }).catch(function (err) {
+                    console.error('Could not copy HTML: ', err);
+                });
+            });
+
+            document.getElementById('copyBtn').addEventListener('click', function() {
+                const generatedDoc = document.getElementById('generatedDocument').textContent;
+                navigator.clipboard.writeText(generatedDoc).then(function() {
+                    alert('Document copied to clipboard!');
+                }, function(err) {
+                    console.error('Could not copy text: ', err);
+                });
+            });
+        });
+    </script>
+    <footer>
+        <p>&copy; 2025 Aspect Legal. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>

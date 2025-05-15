@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signature Blocks Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .container {
+            max-width: auto;
+            margin: 20px auto;
+            padding: 20px;
+            flex: 1;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 5px;
+        }
+        
+        h1, h2 {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            border-bottom: 2px solid #2980b9;
+            padding-bottom: 10px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="number"], select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #2980b9;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        button:hover {
+            background-color: #3498db;
+        }
+        .signature-block {
+            margin-top: 30px;
+            border: 1px solid #ddd;
+            padding: 20px;
+            background: white;
+            page-break-inside: avoid;
+            font-family: "Arial MT", Arial, sans-serif;
+            position: relative;
+        }
+        .remove-block {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .remove-block:hover {
+            background-color: #c0392b;
+        }
+        /* For company and individual blocks */
+        .layout-container {
+            display: flex;
+            flex-direction: column;
+        }
+        .upper-description {
+            font-size: 9.5pt;
+            margin: 0;
+            padding: 0;
+            line-height: 1.4;
+        }
+        .description-signature-row {
+            display: flex;
+            width: 100%;
+        }
+        .description-column {
+            width: auto; /* Dynamic width instead of fixed percentage */
+            font-size: 9.5pt;
+            line-height: 1.4;
+            flex-shrink: 0; /* Prevent shrinking */
+        }
+        /* For authorized representative blocks */
+        .auth-container {
+            display: flex;
+            flex-direction: column;
+        }
+        .auth-description {
+            font-size: 9.5pt;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+        .auth-signature-area {
+            width: 100%;
+        }
+        /* Common elements */
+        .line-description {
+            font-size: 6.5pt;
+            text-align: left;
+            margin-top: 2px;
+            margin-bottom: 18px; /* Fixed value that used to be adjustable */
+        }
+        /* For authorized rep - reduced spacing */
+        .auth-line-description {
+            font-size: 6.5pt;
+            text-align: left;
+            margin-top: 2px;
+            margin-bottom: 12px; /* Fixed value that used to be adjustable */
+        }
+        .signature-line {
+            border-bottom: 1px solid black;
+            display: inline-block;
+            width: 200px; /* Adjustable width */
+            height: 1em;
+        }
+        .output-container {
+            margin-top: 30px;
+            border-radius: 5px;
+        }
+        .tab {
+            display: none;
+        }
+        .tab.active {
+            display: block;
+        }
+        .tab-buttons {
+            margin-bottom: 20px;
+        }
+        .tab-button {
+            background-color: #ddd;
+            color: #333;
+        }
+        .tab-button.active {
+            background-color: #2980b9;
+            color: white;
+        }
+        .signature-pair {
+            display: flex;
+        }
+        .signature-column {
+            width: 48%; /* Default width that will be adjusted dynamically */
+        }
+        .signature-space {
+            width: 4%; /* Default width that will be adjusted dynamically */
+        }
+        .authorised-signature-column {
+            width: 100%;
+        }
+        .block-controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        footer {
+            background-color: #2980b9;
+            color: white;
+            text-align: center;
+            margin-top: auto;
+            font-size: 14px;
+            padding: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Signature Blocks Generator</h1>
+        
+        <div class="tab-buttons">
+            <button class="tab-button active" onclick="openTab('agreement')">Agreement</button>
+            <button class="tab-button" onclick="openTab('deed')">Deed</button>
+        </div>
+        
+        <div id="agreement" class="tab active">
+            <div class="form-group">
+                <label>Execution Type:</label>
+                <select id="agreementType">
+                    <option value="company">Company</option>
+                    <option value="individual">Individual</option>
+                    <option value="authorised">Authorised Representative</option>
+                </select>
+            </div>
+            
+            <div id="agreementCompany">
+                <div class="form-group">
+                    <label>Company Name:</label>
+                    <input type="text" id="agreementCompanyName" placeholder="[Company name] Pty Ltd">
+                </div>
+                <div class="form-group">
+                    <label>ACN:</label>
+                    <input type="text" id="agreementCompanyACN" placeholder="[ACN]">
+                </div>
+            </div>
+            
+            <div id="agreementIndividual" style="display:none;">
+                <div class="form-group">
+                    <label>Individual Name:</label>
+                    <input type="text" id="agreementIndividualName" placeholder="[name]">
+                </div>
+            </div>
+            
+            <div id="agreementAuthorised" style="display:none;">
+                <div class="form-group">
+                    <label>Company Name:</label>
+                    <input type="text" id="agreementAuthorisedCompany" placeholder="[Company name]">
+                </div>
+            </div>
+            
+            <button onclick="generateAgreement()">Generate Agreement Clause</button>
+        </div>
+        
+        <div id="deed" class="tab">
+            <div class="form-group">
+                <label>Execution Type:</label>
+                <select id="deedType">
+                    <option value="company">Company</option>
+                    <option value="individual">Individual</option>
+                    <option value="authorised">Authorised Representative</option>
+                </select>
+            </div>
+            
+            <div id="deedCompany">
+                <div class="form-group">
+                    <label>Company Name:</label>
+                    <input type="text" id="deedCompanyName" placeholder="[Company name] Pty Ltd">
+                </div>
+                <div class="form-group">
+                    <label>ACN:</label>
+                    <input type="text" id="deedCompanyACN" placeholder="[ACN]">
+                </div>
+            </div>
+            
+            <div id="deedIndividual" style="display:none;">
+                <div class="form-group">
+                    <label>Individual Name:</label>
+                    <input type="text" id="deedIndividualName" placeholder="[name]">
+                </div>
+            </div>
+            
+            <div id="deedAuthorised" style="display:none;">
+                <div class="form-group">
+                    <label>Company Name:</label>
+                    <input type="text" id="deedAuthorisedCompany" placeholder="[Company name]">
+                </div>
+            </div>
+            
+            <button onclick="generateDeed()">Generate Deed Clause</button>
+        </div>
+        
+        <div class="output-container">
+            <h2>Generated Signature Blocks</h2>
+            <div id="output"></div>
+            
+            <div class="block-controls">
+                <button onclick="addSignatureBlock()">Add Another Block</button>
+                <button onclick="removeLastBlock()" id="removeBlockBtn" style="display:none;">Remove Last Block</button>
+                <button onclick="copyToClipboard()">Copy All to Clipboard</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize variables to track current state
+        let currentDocumentType = 'agreement';
+        let blockCount = 0;
+        
+        // Constant values for spacing (replacing the adjustable ones)
+        const LINE_SPACING = 18;
+        const AUTH_LINE_SPACING = 12;
+        
+        // Tab functionality
+        function openTab(tabName) {
+            const tabs = document.getElementsByClassName('tab');
+            for (let i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active');
+            }
+            document.getElementById(tabName).classList.add('active');
+            
+            const tabButtons = document.getElementsByClassName('tab-button');
+            for (let i = 0; i < tabButtons.length; i++) {
+                tabButtons[i].classList.remove('active');
+            }
+            event.currentTarget.classList.add('active');
+            
+            // Update current document type
+            currentDocumentType = tabName;
+        }
+        
+        // Show/hide relevant fields based on execution type
+        document.getElementById('agreementType').addEventListener('change', function() {
+            const type = this.value;
+            document.getElementById('agreementCompany').style.display = type === 'company' ? 'block' : 'none';
+            document.getElementById('agreementIndividual').style.display = type === 'individual' ? 'block' : 'none';
+            document.getElementById('agreementAuthorised').style.display = type === 'authorised' ? 'block' : 'none';
+        });
+        
+        document.getElementById('deedType').addEventListener('change', function() {
+            const type = this.value;
+            document.getElementById('deedCompany').style.display = type === 'company' ? 'block' : 'none';
+            document.getElementById('deedIndividual').style.display = type === 'individual' ? 'block' : 'none';
+            document.getElementById('deedAuthorised').style.display = type === 'authorised' ? 'block' : 'none';
+        });
+        
+        // Generate agreement clause
+        function generateAgreement() {
+            const signatureBlock = createAgreementBlock();
+            
+            // First block replaces content, subsequent blocks are appended
+            if (blockCount === 0) {
+                document.getElementById('output').innerHTML = signatureBlock;
+            } else {
+                document.getElementById('output').innerHTML += signatureBlock;
+            }
+            
+            blockCount++;
+            updateRemoveButtonVisibility();
+        }
+        
+        // Generate deed clause
+        function generateDeed() {
+            const signatureBlock = createDeedBlock();
+            
+            // First block replaces content, subsequent blocks are appended
+            if (blockCount === 0) {
+                document.getElementById('output').innerHTML = signatureBlock;
+            } else {
+                document.getElementById('output').innerHTML += signatureBlock;
+            }
+            
+            blockCount++;
+            updateRemoveButtonVisibility();
+        }
+        
+        // Add another signature block
+        function addSignatureBlock() {
+            if (currentDocumentType === 'agreement') {
+                const signatureBlock = createAgreementBlock();
+                document.getElementById('output').innerHTML += signatureBlock;
+            } else {
+                const signatureBlock = createDeedBlock();
+                document.getElementById('output').innerHTML += signatureBlock;
+            }
+            
+            blockCount++;
+            updateRemoveButtonVisibility();
+        }
+        
+        // Remove last block
+        function removeLastBlock() {
+            if (blockCount > 0) {
+                const blocks = document.getElementById('output').getElementsByClassName('signature-block');
+                if (blocks.length > 0) {
+                    blocks[blocks.length - 1].remove();
+                    blockCount--;
+                    updateRemoveButtonVisibility();
+                }
+            }
+        }
+        
+        // Remove specific block
+        function removeBlock(blockId) {
+            const block = document.getElementById(blockId);
+            if (block) {
+                block.remove();
+                blockCount--;
+                updateRemoveButtonVisibility();
+            }
+        }
+        
+        // Update remove button visibility
+        function updateRemoveButtonVisibility() {
+            document.getElementById('removeBlockBtn').style.display = blockCount > 0 ? 'inline-block' : 'none';
+        }
+        
+        // Helper function to create a unique ID
+        function generateUniqueId() {
+            return 'block-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
+        }
+        
+        // Create agreement block HTML
+        function createAgreementBlock() {
+            const type = document.getElementById('agreementType').value;
+            const blockId = generateUniqueId();
+            let html = `<div class="signature-block" id="${blockId}">`;
+            
+            // Hardcoded values based on execution type
+            let horizontalSpacing, signatureGap;
+            
+            if (type === 'company') {
+                // Hardcoded values for company
+                horizontalSpacing = 120;
+                signatureGap = 8;
+                
+                const companyName = document.getElementById('agreementCompanyName').value || '[Company name] Pty Ltd';
+                const acn = document.getElementById('agreementCompanyACN').value || '[ACN]';
+                
+                // Calculate column widths based on hardcoded gap
+                const gapWidth = parseInt(signatureGap);
+                const columnWidth = (100 - gapWidth) / 2;
+                
+                html += `
+                <div class="layout-container">
+                    <!-- First two lines of description -->
+                    <div class="upper-description">Signed by ${companyName}</div>
+                    <div class="upper-description">ACN ${acn}</div>
+                    
+                    <!-- Description and signature lines side by side, starting from line 3 -->
+                    <div class="description-signature-row">
+                        <div class="description-column" style="padding-right: ${horizontalSpacing}px;">
+                            <div class="upper-description">in accordance with</div>
+                            <div class="upper-description">the provisions of</div>
+                            <div class="upper-description">s127(1) of the</div>
+                            <div class="upper-description"><i>Corporations Act 2001</i></div>
+                        </div>
+                        
+                        <div class="signature-area">
+                            <div class="signature-pair">
+                                <div class="signature-column" style="width: ${columnWidth}%;">
+                                    <div class="signature-line"></div>
+                                    <div class="line-description" style="margin-bottom: ${LINE_SPACING}px;">Signature</div>
+                                    
+                                    <div class="signature-line"></div>
+                                    <div class="line-description" style="margin-bottom: ${LINE_SPACING}px;">Office (Director or Company Secretary)</div>
+                                    
+                                    <div class="signature-line"></div>
+                                    <div class="line-description" style="margin-bottom: ${LINE_SPACING}px;">Full Name</div>
+                                </div>
+                                
+                                <div class="signature-space" style="width: ${gapWidth}%;"></div>
+                                
+                                <div class="signature-column" style="width: ${columnWidth}%;">
+                                    <div class="signature-line"></div>
+                                    <div class="line-description" style="margin-bottom: ${LINE_SPACING}px;">Signature</div>
+                                    
+                                    <div class="signature-line"></div>
+                                    <div class="line-description" style="margin-bottom: ${LINE_SPACING}px;">Office (Director or Company Secretary)</div>
+                                    
+                                    <div class="signature-line"></div>
+                                    <div class="line-description" style="margin-bottom: ${LINE_SPACING}px;">Full Name</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+            
+            } else if (type === 'individual') {
+                // Hardcoded values for individual
+                horizontalSpacing = 12;  // Kept original value
+                signatureGap = 8;
+                
+                const name = document.getElementById('agreementIndividualName').value || '[name]';
+                
+                // Calculate column widths based on hardcoded gap
+                const gapWidth = parseInt(signatureGap);
+                const columnWidth = (100 - gapWidth) / 2;
+                
+                html += `
+                <div class="layout-container">
+                    <div class="upper-description">Signed by</div>
+                    <div class="upper-description">${name}</div>
+                    
+                    <div class="description-signature-row">
+                        <div class="description-column" style="padding-right: ${horizontalSpacing}px;">
+                            <div class="upper-description">in the presence of:</div>
+                        </div>
+                        
+                        <div class="signature-area">
+                            <div class="signature-pair">
+                                <div class="signature-column" style="width: ${columnWidth}%;">
+                                    <div class="signature-line"></div>
+                                    <div class="line-description" style="margin-bottom: ${LINE_SPACING}px;">Signature of ${name}</div>
+                                </div>
+                                
+                                <div class="signature-space" style="width: ${gapWidth}%;"></div>
+                                
+                                <div class="signature-column" style="width: ${columnWidth}%;">
+                                    <div class="signature-line"></div>
+                                    <div class="line-description" style="margin-bottom: ${LINE_SPACING}px;">Witness Signature</div>
+                                    
+                                    <div class="signature-line"></div>
+                                    <div class="line-description" style="margin-bottom: ${LINE_SPACING}px;">Witness Full Name</div>
+                                    
+                                    <div class="signature-line"></div>
+                                    <div class="line-description" style="margin-bottom: ${LINE_SPACING}px;">Witness Address</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+
+            } else if (type === 'authorised') {
+                // Keep original values for authorised representative
+                const companyName = document.getElementById('agreementAuthorisedCompany').value || '[Company name]';
+                
+                html += `
+                <div class="auth-container">
+                    <div class="auth-description">Signed for ${companyName} by its authorised officer/representative:</div>
+                    
+                    <div class="auth-signature-area">
+                        <div class="authorised-signature-column">
+                            <div class="signature-line"></div>
+                            <div class="auth-line-description" style="margin-bottom: ${AUTH_LINE_SPACING}px;">Signature</div>
+                            
+                            <div class="signature-line"></div>
+                            <div class="auth-line-description" style="margin-bottom: ${AUTH_LINE_SPACING}px;">Name</div>
+                            
+                            <div class="signature-line"></div>
+                            <div class="auth-line-description" style="margin-bottom: ${AUTH_LINE_SPACING}px;">Title</div>
+                            
+                            <div class="signature-line"></div>
+                            <div class="auth-line-description" style="margin-bottom: ${AUTH_LINE_SPACING}px;">Date</div>
+                        </div>
+                    </div>
+                </div>`;
+            }
+            
+            html += '</div>';
+            return html;
+        }
+        
+        // Create deed block HTML
+        function createDeedBlock() {
+            const type = document.getElementById('deedType').value;
+            const blockId = generateUniqueId();
+            let html = `<div class="signature-block" id="${blockId}">`;
+            
+            // Hardcoded values based on execution type
+            let horizontalSpacing, signatureGap;
+            
+            if (type === 'company') {
+                // Hardcoded values for company
+                horizontalSpacing = 120;
+                signatureGap = 8;
+                
+                const companyName = document.getElementById('deedCompanyName').value || '[Company name] Pty Ltd';
+                const acn = document.getElementById('deedCompanyACN').value || '[ACN]';
+                
+                // Calculate column widths based on hardcoded gap
+                const gapWidth = parseInt(signatureGap);
+                const columnWidth = (100 - gapWidth) / 2;
+                
+                html += `
+                <div class="layout-container">
+                    <!-- First three lines of description -->
+                    <div class="upper-description">Signed, sealed, and</div>
+                    <div class="upper-description">delivered by ${companyName}</div>
+                    <div class="upper-description">ACN ${acn}</div>
+                    
+                    <!-- Description and signature lines side by side, starting from line 4 -->
+                    <div class="description-signature-row">
+                        <div class="description-column" style="padding-right: ${horizontalSpacing}px;">
+                            <div class="upper-description">in accordance with</div>
+                            <div class="upper-description">the provisions of</div>
+                            <div class="upper-description">s127(1) of the</div>
+                            <div class="upper-description"><i>Corporations Act 2001</i></div>
+                        </div>
+                        
+                        <div class="signature-area">
+                            <div class="signature-pair">
+                                <div class="signature-column" style="width: ${columnWidth}%;">
+                                    <div class="signature-line"></div>
+                                    <div class="line-description" style="margin-bottom: ${LINE_SPACING}px;">Signature</div>
+                                    
+                                    <div class="signature-line"></div>
+                                    <div class="line-description" style="margin-bottom: ${LINE_SPACING}px;">Office (Director or Company Secretary)</div>
+                                    
+                                    <div class="signature-line"></div>
+                                    <div class="line-description" style="margin-bottom: ${LINE_SPACING}px;">Full Name</div>
+                                </div>
+                                
+                                <div class="signature-space" style="width: ${gapWidth}%;"></div>
+                                
+                                <div class="signature-column" style="width: ${columnWidth}%;">
+                                    <div class="signature-line"></div>
+                                    <div class="line-description" style="margin-bottom: ${LINE_SPACING}px;">Signature</div>
+                                    
+                                    <div class="signature-line"></div>
+                                    <div class="line-description" style="margin-bottom: ${LINE_SPACING}px;">Office (Director or Company Secretary)</div>
+                                    
+                                    <div class="signature-line"></div>
+                                    <div class="line-description" style="margin-bottom: ${LINE_SPACING}px;">Full Name</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+
+            } else if (type === 'individual') {
+                // Hardcoded values for individual
+                horizontalSpacing = 12;  // Kept original value
+                signatureGap = 8;
+                
+                const name = document.getElementById('deedIndividualName').value || '[name]';
+                
+                // Calculate column widths based on hardcoded gap
+                const gapWidth = parseInt(signatureGap);
+                const columnWidth = (100 - gapWidth) / 2;
+                
+                html += `
+                <div class="layout-container">
+                    <div class="upper-description">Signed, sealed, and</div>
+                    <div class="upper-description">delivered by</div>
+                    <div class="upper-description">${name}</div>
+                    
+                    <div class="description-signature-row">
+                        <div class="description-column" style="padding-right: ${horizontalSpacing}px;">
+                            <div class="upper-description">in the presence of:</div>
+                        </div>
+                        
+                        <div class="signature-area">
+                            <div class="signature-pair">
+                                <div class="signature-column" style="width: ${columnWidth}%;">
+                                    <div class="signature-line"></div>
+                                    <div class="line-description" style="margin-bottom: ${LINE_SPACING}px;">Signature of ${name}</div>
+                                </div>
+                                
+                                <div class="signature-space" style="width: ${gapWidth}%;"></div>
+                                
+                                <div class="signature-column" style="width: ${columnWidth}%;">
+                                    <div class="signature-line"></div>
+                                    <div class="line-description" style="margin-bottom: ${LINE_SPACING}px;">Witness Signature</div>
+                                    
+                                    <div class="signature-line"></div>
+                                    <div class="line-description" style="margin-bottom: ${LINE_SPACING}px;">Witness Full Name</div>
+                                    
+                                    <div class="signature-line"></div>
+                                    <div class="line-description" style="margin-bottom: ${LINE_SPACING}px;">Witness Address</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+
+            } else if (type === 'authorised') {
+                // Keep original values for authorised representative
+                const companyName = document.getElementById('deedAuthorisedCompany').value || '[Company name]';
+                
+                html += `
+                <div class="auth-container">
+                    <div class="auth-description">Signed for ${companyName} by its authorised officer/representative:</div>
+                    
+                    <div class="auth-signature-area">
+                        <div class="authorised-signature-column">
+                            <div class="signature-line"></div>
+                            <div class="auth-line-description" style="margin-bottom: ${AUTH_LINE_SPACING}px;">Signature</div>
+                            
+                            <div class="signature-line"></div>
+                            <div class="auth-line-description" style="margin-bottom: ${AUTH_LINE_SPACING}px;">Name</div>
+                            
+                            <div class="signature-line"></div>
+                            <div class="auth-line-description" style="margin-bottom: ${AUTH_LINE_SPACING}px;">Title</div>
+                            
+                            <div class="signature-line"></div>
+                            <div class="auth-line-description" style="margin-bottom: ${AUTH_LINE_SPACING}px;">Date</div>
+                        </div>
+                    </div>
+                </div>`;
+            }
+            
+            html += '</div>';
+            return html;
+        }
+        
+        // Copy to clipboard
+        function copyToClipboard() {
+            const output = document.getElementById('output');
+            const range = document.createRange();
+            range.selectNode(output);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+            document.execCommand('copy');
+            window.getSelection().removeAllRanges();
+            alert('Signature blocks copied to clipboard!');
+        }
+    </script>
+    <footer>
+        <p>&copy; 2025 Aspect Legal. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>
