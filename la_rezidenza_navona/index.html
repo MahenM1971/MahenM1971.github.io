@@ -131,7 +131,7 @@
 
   <!-- Footer -->
   <footer class="bg-black text-center text-xs text-gray-400 py-8">
-    <p class="mb-2">La Residenza Navona · Rome</p>
+    <p class="mb-2">La Residenza Navona · Roma</p>
     <p class="mb-1">Phone: +39 312 345 6789 | +1 (555) 123-4567</p>
     <p class="mb-1">Email: <a href="mailto:info@laresidenzanavona.com" class="underline hover:text-yellow-500">info@laresidenzanavona.com</a></p>
     <p class="mt-2 text-gray-500">
@@ -150,7 +150,7 @@
         second: '2-digit',
       };
       const time = new Intl.DateTimeFormat([], options).format(new Date());
-      document.getElementById('rome-time').textContent = `Rome: ${time}`;
+      document.getElementById('rome-time').textContent = `Roma: ${time}`;
     }
     setInterval(updateRomeTime, 1000);
     updateRomeTime();
