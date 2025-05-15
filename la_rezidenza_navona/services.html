@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Services – The Continental: Rome</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Playfair Display', serif;
+      background-image: url('assets/images/rome-3800912_1280.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-color: #000;
+    }
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(0, 0, 0, 0.55);
+      z-index: 0;
+    }  
+
+    h2, li {
+      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
+    }
+    strong {
+      color: #facc15; /* Tailwind yellow-400 */
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col text-white relative overflow-x-hidden">
+
+  <!-- Navigation -->
+  <nav class="bg-black bg-opacity-70 backdrop-blur-md p-4 fixed top-0 w-full z-50 shadow-lg">
+    <div class="flex justify-between items-center max-w-6xl mx-auto">
+      <h1 class="text-2xl font-serif tracking-widest">The Continental</h1>
+      <ul class="flex gap-6 text-sm uppercase">
+        <li><a href="index.html" class="hover:text-yellow-400 transition">Home</a></li>
+        <li><a href="services.html" class="hover:text-yellow-400 transition">Services</a></li>
+        <li><a href="contact.html" class="hover:text-yellow-400 transition">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Overlay -->
+  <div class="overlay"></div>
+
+  <!-- Content -->
+  <main class="relative z-10 flex-grow pt-28 pb-20 px-4 sm:px-8 max-w-4xl mx-auto w-full">
+    <h1 class="text-4xl sm:text-5xl font-serif text-center font-semibold mb-10">Exquisite Services</h1>
+    <ul class="space-y-10 text-lg leading-relaxed text-center px-2 sm:px-0">
+      <li>
+        <strong>Luxury Accommodations</strong><br/>
+        Lavishly appointed suites with views of the Eternal City — where classic Roman charm meets modern comfort.
+      </li>
+      <li>
+        <strong>Fine Dining & Roman Gastronomy</strong><br/>
+        Indulge in authentic Italian cuisine, curated by award-winning chefs, served in a setting of timeless elegance.
+      </li>
+      <li>
+        <strong>Private Tailoring – The Sartoria</strong><br/>
+        Bespoke tailoring services available on request, blending Italian craftsmanship with discretion and style.
+      </li>
+      <li>
+        <strong>Cellar & Spirits – The Sommelier</strong><br/>
+        Access to an exclusive selection of rare vintages and handcrafted cocktails — expertly curated by our in-house sommelier.
+      </li>
+      <li>
+        <strong>Concierge & Confidential Services</strong><br/>
+        From private tours of the Colosseum to secure transportation across Europe — our team is at your service 24/7.
+      </li>
+    </ul>
+  </main>
+
+  <!-- Footer -->
+  <footer class="relative z-10 text-center text-xs text-gray-300 py-4">
+    The Continental · Rome
+  </footer>
+
+</body>
+</html>
